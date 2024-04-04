@@ -39,7 +39,6 @@ jobs:
                       xiaomi/sdm710-common.config \
                       xiaomi/grus.config
 
-
           make -j $(nproc) \
                        O="$output_dir" \
                        CC=clang
@@ -47,6 +46,8 @@ jobs:
       - name: Packaging the Kernel
         run: |
           cp -v android_kernel_xiaomi_sm8250/out/arch/arm64/boot/Image \
+                     AnyKernel3/
+          cp -f android_kernel_xiaomi_sm8250/out/arch/arm64/boot/d* \
                      AnyKernel3/
           pushd AnyKernel3
           7z a -mx9 ../Twilight-V2-CI-${{ env.BUILD_TIME }}-grus_4.19-AOSP.zip *
