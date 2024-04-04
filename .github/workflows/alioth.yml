@@ -16,10 +16,10 @@ jobs:
           echo "BUILD_TIME=$(TZ=Asia/Shanghai date +%F)" >> $GITHUB_ENV
       - name: Cloning Sources and Toolchain
         run: |
-          git clone https://github.com/Tkiliay/android_kernel_xiaomi_sm8250.git --depth=1 -b upstream --recurse-submodules android_kernel_xiaomi_sm8250
+          git clone https://github.com/SakuraKyuo/android_kernel_qcom_sdm710.git --depth=1 --recurse-submodules android_kernel_xiaomi_sm8250
           git clone https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9 -b lineage-19.1 --depth=1 --single-branch --no-tags ~/aarch64-linux-android-4.9
           git clone https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9 -b lineage-19.1 --depth=1 --single-branch --no-tags ~/arm-linux-androideabi-4.9
-          git clone https://github.com/Tkiliay/AnyKernel3.git -b alioth
+          git clone https://github.com/Tkiliay/AnyKernel3.git -b grus
           git clone https://gitlab.com/crdroidandroid/android_prebuilts_clang_host_linux-x86_clang-r445002 --depth=1 --single-branch --no-tags -b 12.0 ~/clang
       - name: Compiling Kernel
         run: |
@@ -35,9 +35,9 @@ jobs:
           output_dir=out
           pushd android_kernel_xiaomi_sm8250
           make O="$output_dir" \
-                      vendor/kona-perf_defconfig \
-                      vendor/xiaomi/sm8250-common.config \
-                      vendor/xiaomi/alioth.config
+                      vendor/sdm670-perf_defconfig \
+                      xiaomi/sdm710-common.config \
+                      xiaomi/grus.config
 
 
           make -j $(nproc) \
@@ -49,14 +49,14 @@ jobs:
           cp -v android_kernel_xiaomi_sm8250/out/arch/arm64/boot/Image \
                      AnyKernel3/
           pushd AnyKernel3
-          7z a -mx9 ../Twilight-V2-CI-${{ env.BUILD_TIME }}-alioth-AOSP.zip *
+          7z a -mx9 ../Twilight-V2-CI-${{ env.BUILD_TIME }}-grus_4.19-AOSP.zip *
           popd
       - name: Creating Config Info
         run: |
-          echo "Device: Redmi K40
-          Code: Alioth
+          echo "Device: Xiaomi MI 9 SE
+          Code: grus
           Build Code: ${{ github.run_number }}
-          Twilight Kernel For Redmi K40" >> INFO.txt
+          Xiaomi MI 9 SE 4.19 kernel" >> INFO.txt
       - name: Uploading Kernel Package to GH-Release
         uses: ncipollo/release-action@v1.8.6
         with:
