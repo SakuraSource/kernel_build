@@ -47,7 +47,7 @@ jobs:
         run: |
           cp -v android_kernel_xiaomi_sm8250/out/arch/arm64/boot/Image \
                      AnyKernel3/
-          cp -f android_kernel_xiaomi_sm8250/out/arch/arm64/boot/dts \
+          cp -r android_kernel_xiaomi_sm8250/out/arch/arm64/boot/dts \
                      AnyKernel3/
           pushd AnyKernel3
           7z a -mx9 ../Twilight-V2-CI-${{ env.BUILD_TIME }}-grus_4.19-AOSP.zip *
